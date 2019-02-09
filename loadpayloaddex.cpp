@@ -156,8 +156,7 @@ void loadDexEntry(const char* dexPath) {//汇总方法，一步到位
     AKLog("dexOptPath is:%s\n", dexOptPath);
     jobject dexClassLoader = getDexClassLoaderJNI(dexPath, dexOptPath, NULL,
                                                   getAppClassLoaderJNI());
-    const char* payloadClassName="com.pvdnc.psvision.injectdex.Payload";//发版的时候InjectDex必须要有这个类
-    //const char* payloadClassName="com.pvdnc.psvision.liverecorder.Payload";//这个只是给/system/test.dex做测试用的
+    const char* payloadClassName="com.injectdex.Payload";//发版的时候InjectDex必须要有这个类
     runPayloadStartJNI(dexClassLoader, env->NewStringUTF(payloadClassName));
     AKLog("loadDexEntry finished\n");
 }

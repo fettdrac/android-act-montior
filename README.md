@@ -1,10 +1,15 @@
 # android-act-montior
 
 本人高中生（高二）一枚，我的渣英语写出来的渣文案，代码注释都是中文
+
 我是个新手，小白级那种，各位看看我写的c++代码就知道了（C#和JAVA中毒已深，反射JAVA层方法超级多，虽然比较稳定的那种），而且我自己都看出了好几个栈溢出覆盖返回值，临界资源不加锁导致可以race的绕过漏洞（尤其是UserAuthReceiver.java里，那种文件交互）
+
 总之一句话就是这玩意的lib通过libinject2注入zygote可以监控APP的行为，目前已经实现了拍照（camera1 camera2都可以拦截），定位拦截，并且发一个提示给用户让用户确认让不让app做操作的功能。
+
 这里只上传关键代码，因为我电脑上的git不知道出了啥问题，一上传整个项目文件夹就崩（第一次在GITHUB上传代码）
+
 再次感谢asLody,Rprop大佬提供的Hook Framework和代码中的思路指导
+
 小白萌新，欢迎并希望dalao给出意见，协议就是用了里面我自己写的代码注明一下是我的就好了（应该也没人会用把）
 
 This is a userApp activity(not a view) montior(a kind of supervision)

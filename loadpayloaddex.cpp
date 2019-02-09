@@ -28,10 +28,6 @@ jobject getApplicationJNI(){
     return thisApp;
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_com_pvdnc_psvision_injectdex_Native_getApplicationJNI(JNIEnv *env_bak,jobject){
-    return getApplicationJNI();
-}
-
 jstring getDirJNI(jstring dirName) {
     JNIEnv *env = getJNIEnvByDLSYM();
     //获取dirFile
@@ -49,10 +45,6 @@ jstring getDirJNI(jstring dirName) {
     return absPath;
 }
 
-extern "C" JNIEXPORT jstring JNICALL Java_com_pvdnc_psvision_injectdex_Native_getDirJNI(JNIEnv *env_bak,jobject,jstring dirName){
-    return getDirJNI(dirName);
-}
-
 jobject getSystemClassLoaderJNI(){
     JNIEnv *env=getJNIEnvByDLSYM();
     jclass cClass=env->FindClass("java/lang/ClassLoader");
@@ -66,10 +58,6 @@ jobject getSystemClassLoaderJNI(){
     return classLoader;
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_com_pvdnc_psvision_injectdex_Native_getSystemClassLoaderJNI(JNIEnv *env_bak,jobject){
-    return getSystemClassLoaderJNI();
-}
-
 jobject getAppClassLoaderJNI(){
     JNIEnv *env=getJNIEnvByDLSYM();
     //获取AppClassLoader
@@ -79,10 +67,6 @@ jobject getAppClassLoaderJNI(){
     jobject classLoader=env->CallObjectMethod(getApplicationJNI(),gclMethod);
     AKLog("appClassLoader address:%p\n",classLoader);
     return classLoader;
-}
-
-extern "C" JNIEXPORT jobject JNICALL Java_com_pvdnc_psvision_injectdex_Native_getAppClassLoaderJNI(JNIEnv *env_bak,jobject){
-    return getAppClassLoaderJNI();
 }
 
 #define JSTRING_SIG "Ljava/lang/String;"
@@ -114,7 +98,7 @@ jobject getDexClassLoaderJNI(const char* dexPath,const char* dexOptPath,const ch
     return newDCL;
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_com_pvdnc_psvision_injectdex_Native_getDexClassLoaderJNI(JNIEnv *env_bak,jobject,
+extern "C" JNIEXPORT jobject JNICALL Java_com_injectdex_Native_getDexClassLoaderJNI(JNIEnv *env_bak,jobject,
                                                                                                     jstring dexPath,jstring dexOptPath,jstring libPath,jboolean useAppClassLoader){
     if(useAppClassLoader){
         AKLog("choose to use appClassLoader\n");
@@ -140,10 +124,6 @@ void runPayloadStartJNI(jobject dexClassLoader,jstring className/*这个参数�
     AKLog("callStaticVoidMethod finished");
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_pvdnc_psvision_injectdex_Native_runPayloadStartJNI(JNIEnv *env_bak,jobject,
-                                                                                               jobject dexClassLoader,jstring className){
-    runPayloadStartJNI(dexClassLoader,className);
-}
 static bool isLoaded;
 void loadDexEntry(const char* dexPath) {//汇总方法，一步到位
     if(isLoaded) {
@@ -159,11 +139,6 @@ void loadDexEntry(const char* dexPath) {//汇总方法，一步到位
     const char* payloadClassName="com.injectdex.Payload";//发版的时候InjectDex必须要有这个类
     runPayloadStartJNI(dexClassLoader, env->NewStringUTF(payloadClassName));
     AKLog("loadDexEntry finished\n");
-}
-
-extern "C" JNIEXPORT void JNICALL Java_com_pvdnc_psvision_injectdex_Native_loadDexEntry(JNIEnv *env_bak,jobject,jstring dexPath) {
-    JNIEnv *env = getJNIEnvByDLSYM();
-    loadDexEntry(env->GetStringUTFChars(dexPath, NULL));
 }
 
 class static_initializer {//在Application.OnCreate之后调用，或在so被dlopen之后调用
